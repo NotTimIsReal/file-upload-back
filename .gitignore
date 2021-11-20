@@ -1,8 +1,11 @@
 #secrets
 .env
+/files
+test.http
 # compiled output
 /dist
 /node_modules
+/test
 
 # Logs
 logs
