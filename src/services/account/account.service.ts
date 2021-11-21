@@ -6,7 +6,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { outputFile } from 'fs-extra';
 const accounts = [];
-const hasher = (string: any): string => {
+export const hasher = (string: any): string => {
   return createHash('sha256').update(string).digest('hex');
 };
 const uid = function () {
@@ -20,14 +20,12 @@ type Files = {
 };
 @Injectable()
 export class AccountService {
-  constructor(
-    @InjectModel('User') private readonly productModel: Model<user>,
-  ) {}
+  constructor(@InjectModel('User') private readonly userModel: Model<user>) {}
   async getAccounts(request: Request) {
     const answer = [];
     if (!request.headers.authorization) return HttpStatus.UNAUTHORIZED;
     else {
-      answer.push(...(await this.productModel.find()));
+      answer.push(...(await this.userModel.find()));
       const r = answer.map((e) => {
         const n = { ...e._doc };
         delete n['password'];
@@ -40,18 +38,22 @@ export class AccountService {
     }
   }
   async getAccount(id: string): Promise<object> {
-    const end = await this.productModel.findOne({ userid: id });
+    const end = await this.userModel.findOne({ userid: id });
     return end;
   }
-  postNewFile(file: Express.Multer.File, id, _req): HttpStatus {
+  async postNewFile(file: Express.Multer.File, id, _req): Promise<HttpStatus> {
     if (!file) return HttpStatus.NO_CONTENT;
+    const user = await this.userModel.findOne({ userid: id });
+    if (!user) return HttpStatus.SERVICE_UNAVAILABLE;
     console.log(file);
-    const filenames = file.originalname.replace(' ', '_').split('.');
-    outputFile(
-      `files/${id}/${filenames[0] + `(${id})`}` + `.${filenames[1]}`,
-      file.buffer,
-      (err) => {
-        err ? console.log(err) : null;
+    const filenames = file.originalname.replace(' ', '_');
+    outputFile(`files/${id}/${filenames}`, file.buffer, (err) => {
+      err ? console.log(err) : null;
+    });
+    await this.userModel.updateOne(
+      { userid: id },
+      {
+        lastUploaded: Date.now(),
       },
     );
     return 201;
@@ -70,10 +72,11 @@ export class AccountService {
     if (!username) return HttpStatus.NO_CONTENT;
     if (accounts.find((u) => u.username === username))
       return HttpStatus.NOT_ACCEPTABLE;
+    if (!RegExp(/^\S+@\S+\.\S+$/).test(email)) return HttpStatus.NOT_ACCEPTABLE;
     const id = await uid();
     console.log(accounts);
     const p = hasher(password);
-    const db = new this.productModel({
+    const db = new this.userModel({
       userid: id,
       username,
       email,

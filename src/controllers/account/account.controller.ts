@@ -1,3 +1,4 @@
+import { LocalGuard } from './../../guards/local-auth.guard';
 import {
   Controller,
   Get,
@@ -7,10 +8,12 @@ import {
   Post,
   UploadedFile,
   UseInterceptors,
+  UseGuards,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Request, Express } from 'express';
 import { AccountService } from '../../services/account/account.service';
+import { User } from 'src/model/user.model';
 @Controller('account')
 export class AccountController {
   constructor(private readonly accountService: AccountService) {}
@@ -26,18 +29,21 @@ export class AccountController {
   getAccount(@Param('id') param) {
     return this.accountService.getAccount(param);
   }
+  @UseGuards(LocalGuard)
   @Get(':id/files')
-  getFiled(@Req() req: Request, @Param('id') param): HttpStatus | object {
-    if (!req.headers.authorization) return HttpStatus.UNAUTHORIZED;
+  getFiled(@Req() req: Request<User>, @Param('id') param): HttpStatus | object {
+    console.log('test');
     return {};
   }
+  @UseGuards(LocalGuard)
   @Post(':id/newfile')
   @UseInterceptors(FileInterceptor('file'))
   postNewFile(
-    @Req() req: Request,
+    @Req() req: Request | any,
     @Param('id') param,
     @UploadedFile() file: Express.Multer.File,
-  ): HttpStatus {
+  ): Promise<HttpStatus> | HttpStatus {
+    if (req.user.userid !== param) return 403;
     return this.accountService.postNewFile(file, param, req);
   }
 }
