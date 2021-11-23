@@ -1,4 +1,4 @@
-import { User as user } from './../../model/user.model';
+import { User, User as user } from './../../model/user.model';
 import { Injectable, HttpStatus } from '@nestjs/common';
 import { Request } from 'express';
 import { createHash } from 'crypto';
@@ -7,6 +7,13 @@ import { Model } from 'mongoose';
 import { outputFile } from 'fs-extra';
 import { UserService } from '../user/user.service';
 const accounts = [];
+type publicuser = {
+  userid: string;
+  createdAt: number;
+  username: string;
+  UploadedFileSize: string;
+  lastUploaded: number;
+};
 export const hasher = (string: any): string => {
   return createHash('sha256').update(string).digest('hex');
 };
@@ -41,7 +48,7 @@ export class AccountService {
       return r;
     }
   }
-  async getAccount(id: string): Promise<object | HttpStatus> {
+  async getAccount(id: string): Promise<publicuser | number | any> {
     const end = await this.userModel.findOne({ userid: id });
     if (!end) return HttpStatus.NOT_FOUND;
     const { userid, createdAt, username, UploadedFileSize, lastUploaded } = end;
@@ -83,6 +90,7 @@ export class AccountService {
   }
   async postSignUp(req: Request): Promise<string | HttpStatus> {
     const { password, email, username } = req.body;
+
     if (!password) return HttpStatus.NO_CONTENT;
     if (!email) return HttpStatus.NO_CONTENT;
     if (!username) return HttpStatus.NO_CONTENT;
