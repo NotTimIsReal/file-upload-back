@@ -9,6 +9,9 @@ export class UserService {
   async findUserById(id: string): Promise<any> {
     return await this.userModel.findOne({ userid: id });
   }
+  async findUserByName(name: string) {
+    return await this.userModel.findOne({ username: name });
+  }
   async deleteUserById(id: string): Promise<HttpStatus> {
     await this.userModel.findOneAndDelete({ userid: id });
     return HttpStatus.OK;

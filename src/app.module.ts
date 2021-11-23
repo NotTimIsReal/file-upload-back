@@ -1,3 +1,4 @@
+import { SessionSerializer } from './serializers/session.serializer';
 import { LocalStrategy } from './strategies/auth/local.strategy';
 import { Module } from '@nestjs/common';
 import { AccountController } from './controllers/account/account.controller';
@@ -14,9 +15,15 @@ config({ path: './.env' });
   imports: [
     MongooseModule.forRoot(process.env.DB),
     MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
-    PassportModule,
+    PassportModule.register({ session: true }),
   ],
   controllers: [AccountController, AuthController],
-  providers: [AccountService, AuthService, UserService, LocalStrategy],
+  providers: [
+    AccountService,
+    AuthService,
+    UserService,
+    LocalStrategy,
+    SessionSerializer,
+  ],
 })
 export class AppModule {}

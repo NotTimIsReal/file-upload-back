@@ -7,6 +7,7 @@ export const UserSchema = new mongoose.Schema({
   UploadedFileSize: { required: true, type: String },
   lastUploaded: { required: true, type: Number },
   password: { required: true, type: String },
+  files: { type: Array },
 });
 export class User {
   constructor(
@@ -17,5 +18,6 @@ export class User {
     public UploadedFileSize: string,
     public lastUploaded: number,
     public password: string,
+    public files: Array<string>,
   ) {}
 }

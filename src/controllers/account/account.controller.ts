@@ -1,3 +1,4 @@
+import { AuthenticatedGuard } from './../../guards/authenticated.guard';
 import { LocalGuard } from './../../guards/local-auth.guard';
 import {
   Controller,
@@ -17,6 +18,7 @@ import { User } from 'src/model/user.model';
 @Controller('account')
 export class AccountController {
   constructor(private readonly accountService: AccountService) {}
+  @UseGuards(AuthenticatedGuard)
   @Get('accounts')
   getAccounts(@Req() req: Request): any {
     return this.accountService.getAccounts(req);
@@ -29,13 +31,18 @@ export class AccountController {
   getAccount(@Param('id') param) {
     return this.accountService.getAccount(param);
   }
-  @UseGuards(LocalGuard)
-  @Get(':id/files')
-  getFiled(@Req() req: Request<User>, @Param('id') param): HttpStatus | object {
-    console.log('test');
-    return {};
+  @Get('user/:username')
+  getUser(@Param('username') username: string) {
+    return this.accountService.getAccountByName(username);
   }
-  @UseGuards(LocalGuard)
+  @UseGuards(AuthenticatedGuard)
+  @Get(':id/files')
+  getFiled(@Req() req: any, @Param('id') param): HttpStatus | object {
+    if (req.user.userid !== param) return 403;
+    console.log('test');
+    return this.accountService.getFiles(param);
+  }
+  @UseGuards(AuthenticatedGuard)
   @Post(':id/newfile')
   @UseInterceptors(FileInterceptor('file'))
   postNewFile(

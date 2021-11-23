@@ -5,6 +5,7 @@ import { createHash } from 'crypto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { outputFile } from 'fs-extra';
+import { UserService } from '../user/user.service';
 const accounts = [];
 export const hasher = (string: any): string => {
   return createHash('sha256').update(string).digest('hex');
@@ -20,7 +21,10 @@ type Files = {
 };
 @Injectable()
 export class AccountService {
-  constructor(@InjectModel('User') private readonly userModel: Model<user>) {}
+  constructor(
+    @InjectModel('User') private readonly userModel: Model<user>,
+    private readonly userService: UserService,
+  ) {}
   async getAccounts(request: Request) {
     const answer = [];
     if (!request.headers.authorization) return HttpStatus.UNAUTHORIZED;
@@ -37,9 +41,20 @@ export class AccountService {
       return r;
     }
   }
-  async getAccount(id: string): Promise<object> {
+  async getAccount(id: string): Promise<object | HttpStatus> {
     const end = await this.userModel.findOne({ userid: id });
-    return end;
+    if (!end) return HttpStatus.NOT_FOUND;
+    const { userid, createdAt, username, UploadedFileSize, lastUploaded } = end;
+    return {
+      userid,
+      createdAt,
+      username,
+      UploadedFileSize,
+      lastUploaded,
+    };
+  }
+  async getAccountByName(name: string) {
+    return await this.userService.findUserByName(name);
   }
   async postNewFile(file: Express.Multer.File, id, _req): Promise<HttpStatus> {
     if (!file) return HttpStatus.NO_CONTENT;
@@ -50,19 +65,20 @@ export class AccountService {
     outputFile(`files/${id}/${filenames}`, file.buffer, (err) => {
       err ? console.log(err) : null;
     });
+    const files = [...(await this.userModel.findOne({ userid: id })).files];
+    files.push(`files/${id}/${filenames}`);
     await this.userModel.updateOne(
       { userid: id },
       {
         lastUploaded: Date.now(),
+        files,
       },
     );
     return 201;
   }
-  getFiles(): Files {
+  async getFiles(id: string): Promise<{ files: any[] }> {
     return {
-      size: 100,
-      lastCreated: 100000,
-      mostUsedType: 't',
+      files: (await this.userModel.findOne({ userid: id })).files,
     };
   }
   async postSignUp(req: Request): Promise<string | HttpStatus> {
@@ -84,6 +100,7 @@ export class AccountService {
       password: p,
       UploadedFileSize: '0mb',
       lastUploaded: 0,
+      files: [],
     });
     db.save();
     return `${201} ID:${id} `;
