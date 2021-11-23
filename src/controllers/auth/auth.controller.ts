@@ -1,3 +1,4 @@
+import { AuthenticatedGuard } from './../../guards/authenticated.guard';
 import { LocalGuard } from './../../guards/local-auth.guard';
 import {
   Controller,
@@ -22,13 +23,9 @@ export class AuthController {
   ): string | void {
     return this.authService.getLogin(callback, res);
   }
+  @UseGuards(AuthenticatedGuard)
   @Get('signout')
   getSignOut(@Req() req: Request) {
-    req.logout();
-    req.session.destroy((err) => {
-      if (err) return;
-    });
-    console.log('logout');
-    return 200;
+    this.authService.getSignOut(req);
   }
 }

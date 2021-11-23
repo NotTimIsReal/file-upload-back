@@ -1,3 +1,4 @@
+import { UserService } from './../../services/user/user.service';
 import { AuthenticatedGuard } from './../../guards/authenticated.guard';
 import { LocalGuard } from './../../guards/local-auth.guard';
 import {
@@ -10,6 +11,7 @@ import {
   UploadedFile,
   UseInterceptors,
   UseGuards,
+  Body,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Request, Express } from 'express';
@@ -17,7 +19,10 @@ import { AccountService } from '../../services/account/account.service';
 import { User } from 'src/model/user.model';
 @Controller('account')
 export class AccountController {
-  constructor(private readonly accountService: AccountService) {}
+  constructor(
+    private readonly accountService: AccountService,
+    private readonly userService: UserService,
+  ) {}
   @UseGuards(AuthenticatedGuard)
   @Get('accounts')
   getAccounts(@Req() req: Request): any {
@@ -52,5 +57,19 @@ export class AccountController {
   ): Promise<HttpStatus> | HttpStatus {
     if (req.user.userid !== param) return 403;
     return this.accountService.postNewFile(file, param, req);
+  }
+  @UseGuards(AuthenticatedGuard)
+  @Post(':id/deletefile')
+  async deleteFile(
+    @Req() req: any,
+    @Param('id') id: string,
+    @Body('files') file: string,
+  ): Promise<number | string[]> {
+    if (req.user.userid !== id) return 403;
+    if (!file) return HttpStatus.NO_CONTENT;
+    const allFiles = await this.userService.getFilesByUserId(id);
+    const foundFile = allFiles.find((e) => e === file);
+    if (!foundFile) return HttpStatus.REQUESTED_RANGE_NOT_SATISFIABLE;
+    return this.userService.deleteFileByUserId(id, file);
   }
 }

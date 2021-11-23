@@ -20,8 +20,9 @@ async function bootstrap() {
     exposedHeaders: 'Set-Cookie',
     allowedHeaders:
       'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept',
-    origin: '*',
+    origin: true,
     maxAge: 1000 * 604800,
+    credentials: true,
   });
   app.use(
     session({
