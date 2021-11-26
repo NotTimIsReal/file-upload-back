@@ -28,6 +28,6 @@ export class AuthController {
   @UseGuards(AuthenticatedGuard)
   @Get('signout')
   getSignOut(@Req() req: Request) {
-    this.authService.getSignOut(req);
+    return this.authService.getSignOut(req);
   }
 }
