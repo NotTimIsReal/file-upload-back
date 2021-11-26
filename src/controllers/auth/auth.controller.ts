@@ -1,3 +1,4 @@
+import { UnAuthenticatedGuard } from './../../guards/unauthenticated.guard';
 import { AuthenticatedGuard } from './../../guards/authenticated.guard';
 import { LocalGuard } from './../../guards/local-auth.guard';
 import {
@@ -16,6 +17,7 @@ import { Response, Request } from 'express';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
   @UseGuards(LocalGuard)
+  @UseGuards(UnAuthenticatedGuard)
   @Get('login')
   getLogin(
     @Query('callback') callback: string,

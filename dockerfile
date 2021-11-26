@@ -6,4 +6,4 @@ RUN git clone https://github.com/NotTimIsReal/nestjs-test-trial
 RUN cd nestjs-test-trial && yarn install 
 WORKDIR /nestjs-test-trial
 RUN yarn build
-CMD [ "yarn", "start:prod" ]
+CMD ["yarn", "start:prod" ]

@@ -34,19 +34,16 @@ export class AccountService {
   ) {}
   async getAccounts(request: Request) {
     const answer = [];
-    if (!request.headers.authorization) return HttpStatus.UNAUTHORIZED;
-    else {
-      answer.push(...(await this.userModel.find()));
-      const r = answer.map((e) => {
-        const n = { ...e._doc };
-        delete n['password'];
-        delete n['email'];
-        delete n['_v'];
-        delete n['_id'];
-        return n;
-      });
-      return r;
-    }
+    answer.push(...(await this.userModel.find()));
+    const r = answer.map((e) => {
+      const n = { ...e._doc };
+      delete n['password'];
+      delete n['email'];
+      delete n['_v'];
+      delete n['_id'];
+      return n;
+    });
+    return r;
   }
   async getAccount(id: string): Promise<publicuser | number | any> {
     const end = await this.userModel.findOne({ userid: id });
@@ -61,7 +58,14 @@ export class AccountService {
     };
   }
   async getAccountByName(name: string) {
-    return await this.userService.findUserByName(name);
+    const { userid, username, createdAt, UploadedFileSize } =
+      await this.userService.findUserByName(name);
+    return {
+      userid,
+      username,
+      createdAt,
+      UploadedFileSize,
+    };
   }
   async postNewFile(file: Express.Multer.File, id, _req): Promise<HttpStatus> {
     if (!file) return HttpStatus.NO_CONTENT;
@@ -90,7 +94,6 @@ export class AccountService {
   }
   async postSignUp(req: Request): Promise<string | HttpStatus> {
     const { password, email, username } = req.body;
-
     if (!password) return HttpStatus.NO_CONTENT;
     if (!email) return HttpStatus.NO_CONTENT;
     if (!username) return HttpStatus.NO_CONTENT;

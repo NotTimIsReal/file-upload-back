@@ -1,3 +1,4 @@
+import { UnAuthenticatedGuard } from './../../guards/unauthenticated.guard';
 import { UserService } from './../../services/user/user.service';
 import { AuthenticatedGuard } from './../../guards/authenticated.guard';
 import { LocalGuard } from './../../guards/local-auth.guard';
@@ -23,11 +24,11 @@ export class AccountController {
     private readonly accountService: AccountService,
     private readonly userService: UserService,
   ) {}
-  @UseGuards(AuthenticatedGuard)
   @Get('accounts')
   getAccounts(@Req() req: Request): any {
     return this.accountService.getAccounts(req);
   }
+  @UseGuards(UnAuthenticatedGuard)
   @Post('signup')
   postSignUp(@Req() req: Request) {
     return this.accountService.postSignUp(req);
@@ -41,10 +42,10 @@ export class AccountController {
     if (req.user && username === '@me') {
       const account = await this.accountService.getAccount(req.user.userid);
       console.log(account);
-      return this.accountService.getAccountByName(account.username);
+      return await this.accountService.getAccountByName(account.username);
     } else if (!req.user && username === '@me')
       return HttpStatus.METHOD_NOT_ALLOWED;
-    return this.accountService.getAccountByName(username);
+    return await this.accountService.getAccountByName(username);
   }
   @UseGuards(AuthenticatedGuard)
   @Get(':id/files')

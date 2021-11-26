@@ -14,7 +14,9 @@ export class AuthService {
   getSignOut(req: Request) {
     req.logout();
     req.session.destroy((err) => {
-      if (err) return;
+      if (err) {
+        return err;
+      }
     });
     return 200;
   }
