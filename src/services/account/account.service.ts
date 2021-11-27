@@ -58,8 +58,10 @@ export class AccountService {
     };
   }
   async getAccountByName(name: string) {
-    const { userid, username, createdAt, UploadedFileSize } =
-      await this.userService.findUserByName(name);
+    const acc = await this.userService.findUserByName(name);
+    if (!acc) return 404;
+    const { userid, username, createdAt, UploadedFileSize } = acc;
+
     return {
       userid,
       username,
