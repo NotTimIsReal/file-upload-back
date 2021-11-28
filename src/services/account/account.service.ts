@@ -99,11 +99,7 @@ export class AccountService {
     if (!password) return HttpStatus.NO_CONTENT;
     if (!email) return HttpStatus.NO_CONTENT;
     if (!username) return HttpStatus.NO_CONTENT;
-<<<<<<< HEAD
     if (await this.userService.findUserByName(username))
-=======
-    if (accounts.find((u) => u.username === username))
->>>>>>> 5a5f2d2b36118f34c4bf04016b779a9cb207c448
       return HttpStatus.NOT_ACCEPTABLE;
     if (!RegExp(/^\S+@\S+\.\S+$/).test(email)) return HttpStatus.NOT_ACCEPTABLE;
     const id = await uid();
