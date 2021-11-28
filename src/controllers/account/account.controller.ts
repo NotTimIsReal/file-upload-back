@@ -13,11 +13,12 @@ import {
   UseInterceptors,
   UseGuards,
   Body,
+  Delete,
+  Res,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { Request, Express } from 'express';
+import { Request, Express, Response } from 'express';
 import { AccountService } from '../../services/account/account.service';
-import { User } from 'src/model/user.model';
 @Controller('account')
 export class AccountController {
   constructor(
@@ -55,6 +56,58 @@ export class AccountController {
     return this.accountService.getFiles(param);
   }
   @UseGuards(AuthenticatedGuard)
+  @Get(':id/file/:file')
+  getFile(
+    @Param('id') id: string,
+    @Param('file') file: string,
+    @Req() req: any,
+  ) {
+    if (req.user && req.user.userid !== id) return 403;
+    return this.accountService.getFile(id, file);
+  }
+  @UseGuards(AuthenticatedGuard)
+  @Get(':id/file/:file/view')
+  async getFileAndShowAsFile(
+    @Param('id') id: string,
+    @Param('file') file: string,
+    @Req() req: any,
+    @Res() res: Response,
+  ) {
+    if (req.user && req.user.userid !== id) return 403;
+    const f = await this.userService.getFilesByUserIdAndReturnAsBuffer(
+      id,
+      file,
+    );
+    const ctypes = {
+      png: 'image/png',
+      jpg: 'image/jpeg',
+      jpeg: 'image/jpeg',
+      txt: 'text/plain',
+      json: 'application/json',
+      pdf: 'application/pdf',
+      doc: 'application/msword',
+      docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      xls: 'application/vnd.ms-excel',
+      xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      ppt: 'application/vnd.ms-powerpoint',
+      pptx: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+      js: 'application/javascript',
+      html: 'text/html',
+      css: 'text/css',
+      mp4: 'video/mp4',
+      avi: 'video/x-msvideo',
+      mp3: 'audio/mpeg',
+      wav: 'audio/x-wav',
+      flac: 'audio/flac',
+      ogg: 'audio/ogg',
+      webm: 'video/webm',
+      mkv: 'video/x-matroska',
+    };
+    const data = Buffer.from(f.toJSON().data);
+    res.setHeader('Content-Type', ctypes[file.split('.').pop()]);
+    res.send(data);
+  }
+  @UseGuards(AuthenticatedGuard)
   @Post(':id/newfile')
   @UseInterceptors(FileInterceptor('file'))
   postNewFile(
@@ -66,7 +119,7 @@ export class AccountController {
     return this.accountService.postNewFile(file, param, req);
   }
   @UseGuards(AuthenticatedGuard)
-  @Post(':id/deletefile')
+  @Delete(':id/deletefile')
   async deleteFile(
     @Req() req: any,
     @Param('id') id: string,

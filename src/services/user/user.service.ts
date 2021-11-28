@@ -3,7 +3,7 @@ import { hasher } from './../account/account.service';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from 'src/model/user.model';
 import { Model, Types } from 'mongoose';
-import { unlink } from 'fs';
+import { unlink, readFileSync as readFile } from 'fs';
 @Injectable()
 export class UserService {
   constructor(@InjectModel('User') private readonly userModel: Model<User>) {}
@@ -29,5 +29,22 @@ export class UserService {
       if (err) return console.error(err);
     });
     return await this.getFilesByUserId(id);
+  }
+  async getFileByUserId(id: string, file: string): Promise<string> {
+    console.log(file);
+    const allFiles = await this.getFilesByUserId(id);
+    const newarr = allFiles.filter((e) => e.split('/')[2] === file);
+    console.log(newarr);
+    return newarr[0];
+  }
+  async getFilesByUserIdAndReturnAsBuffer(
+    id: string,
+    file: string,
+  ): Promise<Buffer> {
+    const allFiles = await this.getFilesByUserId(id);
+    const newarr = allFiles.filter((e) => e.split('/')[2] === file);
+    const buffer = readFile(newarr[0]);
+    console.log(buffer);
+    return buffer;
   }
 }

@@ -118,4 +118,8 @@ export class AccountService {
     db.save();
     return `${201} ID:${id} `;
   }
+  async getFile(file: string, id: string): Promise<string> {
+    const fileFound = await this.userService.getFileByUserId(file, id);
+    return fileFound;
+  }
 }
