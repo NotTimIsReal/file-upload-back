@@ -40,11 +40,11 @@ export class UserService {
   async getFilesByUserIdAndReturnAsBuffer(
     id: string,
     file: string,
-  ): Promise<Buffer> {
+  ): Promise<Buffer | null> {
     const allFiles = await this.getFilesByUserId(id);
     const newarr = allFiles.filter((e) => e.split('/')[2] === file);
+    if (!newarr[0]) return null;
     const buffer = readFile(newarr[0]);
-    console.log(buffer);
     return buffer;
   }
 }

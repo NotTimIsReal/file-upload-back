@@ -74,7 +74,7 @@ export class AccountService {
     const user = await this.userModel.findOne({ userid: id });
     if (!user) return HttpStatus.SERVICE_UNAVAILABLE;
     console.log(file);
-    const filenames = file.originalname.replace(' ', '_');
+    const filenames = file.originalname.replace(/ /g, '_');
     outputFile(`files/${id}/${filenames}`, file.buffer, (err) => {
       err ? console.log(err) : null;
     });

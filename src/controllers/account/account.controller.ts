@@ -78,6 +78,7 @@ export class AccountController {
       id,
       file,
     );
+    if (!f) return res.sendStatus(404);
     const ctypes = {
       png: 'image/png',
       jpg: 'image/jpeg',
@@ -102,10 +103,17 @@ export class AccountController {
       ogg: 'audio/ogg',
       webm: 'video/webm',
       mkv: 'video/x-matroska',
+      psd: 'image/vnd.adobe.photoshop',
+      zip: 'application/zip',
+      ts: 'application/javascript',
     };
     const data = Buffer.from(f.toJSON().data);
-    res.setHeader('Content-Type', ctypes[file.split('.').pop()]);
+    res.setHeader(
+      'Content-Type',
+      ctypes[file.split('.').pop()] || 'text/plain',
+    );
     res.send(data);
+    return;
   }
   @UseGuards(AuthenticatedGuard)
   @Post(':id/newfile')
