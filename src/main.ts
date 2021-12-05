@@ -5,6 +5,7 @@ import * as session from 'express-session';
 import * as passport from 'passport';
 import * as redis from 'redis';
 import * as connectRedis from 'connect-redis';
+import * as compression from 'compression'
 config({ path: './.env' });
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -24,6 +25,7 @@ async function bootstrap() {
     maxAge: 1000 * 604800,
     credentials: true,
   });
+  app.use(compression())
   app.use(
     session({
       secret: process.env.SECRET,
