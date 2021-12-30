@@ -7,14 +7,25 @@ const session = require("express-session");
 const passport = require("passport");
 const redis = require("redis");
 const connectRedis = require("connect-redis");
+const compression = require("compression");
 (0, dotenv_1.config)({ path: './.env' });
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     const redisStore = connectRedis(session);
-    const redisClient = redis.createClient({
-        host: process.env.REDISHOST,
-        port: process.env.REDISPORT,
-    });
+    let redisClient;
+    if (process.env.REDISPASS != undefined) {
+        redisClient = redis.createClient({
+            host: process.env.REDISHOST,
+            port: process.env.REDISPORT,
+        });
+    }
+    else {
+        redisClient = redis.createClient({
+            host: process.env.REDISHOST,
+            port: process.env.REDISPORT,
+            password: process.env.REDISPASS,
+        });
+    }
     redisClient.on('connect', function (err) {
         console.log('redis connected');
     });
@@ -25,6 +36,7 @@ async function bootstrap() {
         maxAge: 1000 * 604800,
         credentials: true,
     });
+    app.use(compression());
     app.use(session({
         secret: process.env.SECRET,
         resave: false,
