@@ -27,9 +27,6 @@ async function bootstrap() {
     console.log('redis connected');
   });
   app.enableCors({
-    exposedHeaders: 'Set-Cookie',
-    allowedHeaders:
-      'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept',
     origin: true,
     maxAge: 1000 * 604800,
     credentials: true,
@@ -45,7 +42,7 @@ async function bootstrap() {
         maxAge: 1000 * 604800,
         sameSite: 'strict',
         httpOnly: false,
-        secure: false,
+        secure: true,
       },
       store: new redisStore({ client: redisClient }),
     }),
