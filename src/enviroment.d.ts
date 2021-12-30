@@ -5,5 +5,6 @@ declare namespace NodeJS {
     SECRET: string;
     REDISHOST: string;
     REDISPORT: number;
+    REDISPASS: string;
   }
 }
