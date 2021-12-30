@@ -13,7 +13,7 @@ async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     const redisStore = connectRedis(session);
     let redisClient;
-    if (process.env.REDISPASS != undefined) {
+    if (!process.env.REDISPASS) {
         redisClient = redis.createClient({
             host: process.env.REDISHOST,
             port: process.env.REDISPORT,
