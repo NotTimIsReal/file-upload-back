@@ -4,8 +4,14 @@
 test.http
 docker-compose.yml
 # compiled output
-/node_modules
 /test
+.yarn/*
+!.yarn/cache
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
 
 # Logs
 logs
