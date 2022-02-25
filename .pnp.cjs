@@ -43,6 +43,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@nestjs/platform-express", "virtual:1fea5feeeef93c4123d6b3e11f18cb894fd26815a4251eb9ed2e4aa6daddcba6b45babc832b5e08c2a74d66ffcf6e38a4b5091e4176bf1004d4af8b5dd864d52#npm:8.2.0"],
             ["@nestjs/schematics", "virtual:1fea5feeeef93c4123d6b3e11f18cb894fd26815a4251eb9ed2e4aa6daddcba6b45babc832b5e08c2a74d66ffcf6e38a4b5091e4176bf1004d4af8b5dd864d52#npm:8.0.4"],
             ["@nestjs/testing", "virtual:1fea5feeeef93c4123d6b3e11f18cb894fd26815a4251eb9ed2e4aa6daddcba6b45babc832b5e08c2a74d66ffcf6e38a4b5091e4176bf1004d4af8b5dd864d52#npm:8.2.0"],
+            ["@types/compression", "npm:1.7.2"],
             ["@types/connect-redis", "npm:0.0.17"],
             ["@types/cors", "npm:2.8.12"],
             ["@types/express", "npm:4.17.13"],
@@ -50,6 +51,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/jest", "npm:27.0.2"],
             ["@types/multer", "npm:1.4.7"],
             ["@types/node", "npm:16.11.7"],
+            ["@types/passport", "npm:1.0.7"],
             ["@types/passport-local", "npm:1.0.34"],
             ["@types/redis", "npm:2.8.32"],
             ["@types/supertest", "npm:2.0.11"],
@@ -1404,7 +1406,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@nestjs/passport", "virtual:1fea5feeeef93c4123d6b3e11f18cb894fd26815a4251eb9ed2e4aa6daddcba6b45babc832b5e08c2a74d66ffcf6e38a4b5091e4176bf1004d4af8b5dd864d52#npm:8.0.1"],
             ["@nestjs/common", "virtual:1fea5feeeef93c4123d6b3e11f18cb894fd26815a4251eb9ed2e4aa6daddcba6b45babc832b5e08c2a74d66ffcf6e38a4b5091e4176bf1004d4af8b5dd864d52#npm:8.2.0"],
             ["@types/nestjs__common", null],
-            ["@types/passport", null],
+            ["@types/passport", "npm:1.0.7"],
             ["passport", "npm:0.4.1"]
           ],
           "packagePeers": [
@@ -1710,6 +1712,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/body-parser", "npm:1.19.1"],
             ["@types/connect", "npm:3.4.35"],
             ["@types/node", "npm:16.11.7"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@types/compression", [
+        ["npm:1.7.2", {
+          "packageLocation": "./.yarn/cache/@types-compression-npm-1.7.2-7e2a93668a-3457f9d39e.zip/node_modules/@types/compression/",
+          "packageDependencies": [
+            ["@types/compression", "npm:1.7.2"],
+            ["@types/express", "npm:4.17.13"]
           ],
           "linkType": "HARD",
         }]
@@ -6907,6 +6919,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@nestjs/platform-express", "virtual:1fea5feeeef93c4123d6b3e11f18cb894fd26815a4251eb9ed2e4aa6daddcba6b45babc832b5e08c2a74d66ffcf6e38a4b5091e4176bf1004d4af8b5dd864d52#npm:8.2.0"],
             ["@nestjs/schematics", "virtual:1fea5feeeef93c4123d6b3e11f18cb894fd26815a4251eb9ed2e4aa6daddcba6b45babc832b5e08c2a74d66ffcf6e38a4b5091e4176bf1004d4af8b5dd864d52#npm:8.0.4"],
             ["@nestjs/testing", "virtual:1fea5feeeef93c4123d6b3e11f18cb894fd26815a4251eb9ed2e4aa6daddcba6b45babc832b5e08c2a74d66ffcf6e38a4b5091e4176bf1004d4af8b5dd864d52#npm:8.2.0"],
+            ["@types/compression", "npm:1.7.2"],
             ["@types/connect-redis", "npm:0.0.17"],
             ["@types/cors", "npm:2.8.12"],
             ["@types/express", "npm:4.17.13"],
@@ -6914,6 +6927,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/jest", "npm:27.0.2"],
             ["@types/multer", "npm:1.4.7"],
             ["@types/node", "npm:16.11.7"],
+            ["@types/passport", "npm:1.0.7"],
             ["@types/passport-local", "npm:1.0.34"],
             ["@types/redis", "npm:2.8.32"],
             ["@types/supertest", "npm:2.0.11"],
