@@ -3,7 +3,8 @@
 /files
 test.http
 docker-compose.yml
-# compiled output
+# compiled output\
+dist
 /test
 .yarn/*
 !.yarn/cache
