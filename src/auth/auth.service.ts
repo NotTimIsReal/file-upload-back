@@ -1,5 +1,5 @@
-import { UserService } from './../user/user.service';
-import { hasher } from './../account/account.service';
+import { UserService } from '../user/user.service';
+import { hasher } from '../account/account.service';
 import { Injectable, HttpStatus } from '@nestjs/common';
 import { Response, Request } from 'express';
 @Injectable()

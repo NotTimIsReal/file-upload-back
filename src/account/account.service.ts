@@ -1,4 +1,4 @@
-import { User, User as user } from './../../model/user.model';
+import { User, User as user } from '../model/user.model';
 import { Injectable, HttpStatus } from '@nestjs/common';
 import { Request } from 'express';
 import { createHash } from 'crypto';

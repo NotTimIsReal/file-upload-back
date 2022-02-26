@@ -1,7 +1,7 @@
-import { UnAuthenticatedGuard } from './../../guards/unauthenticated.guard';
-import { UserService } from './../../services/user/user.service';
-import { AuthenticatedGuard } from './../../guards/authenticated.guard';
-import { LocalGuard } from './../../guards/local-auth.guard';
+import { UnAuthenticatedGuard } from '../guards/unauthenticated.guard';
+import { UserService } from '../user/user.service';
+import { AuthenticatedGuard } from '../guards/authenticated.guard';
+import { LocalGuard } from '../guards/local-auth.guard';
 import {
   Controller,
   Get,
@@ -18,7 +18,7 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Request, Express, Response } from 'express';
-import { AccountService } from '../../services/account/account.service';
+import { AccountService } from './account.service';
 @Controller('account')
 export class AccountController {
   constructor(
