@@ -5,10 +5,11 @@ import { Response, Request } from 'express';
 @Injectable()
 export class AuthService {
   constructor(private readonly userService: UserService) {}
-  getLogin(callback?: string, res?: Response): any {
+  getLogin(callback?: string, res?: Response): string | void {
     if (callback) return res.redirect(callback);
     else {
-      return res.send('Logged In');
+      console.log('hello');
+      return 'Logged In';
     }
   }
   getSignOut(req: Request) {
@@ -20,9 +21,10 @@ export class AuthService {
     });
     return 200;
   }
-  async validateUser(id: string, password: string): Promise<any> {
+  async validateUser(id: string, password: string) {
     const user = await this.userService.findUserById(id);
-    if (user && user.password === hasher(password)) {
+    const hashed = hasher(password);
+    if (user && user.password === hashed) {
       const { userid, createdAt, username, UploadedFileSize, lastUploaded } =
         user;
       return {

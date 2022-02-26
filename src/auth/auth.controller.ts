@@ -18,13 +18,16 @@ import { Response, Request } from 'express';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
   @UseGuards(LocalGuard)
-  @UseGuards(UnAuthenticatedGuard)
   @Post('login')
   getLogin(
     @Query('callback') callback: string,
-    @Res() res: Response,
+    @Res({
+      passthrough: true,
+    })
+    res: Response,
   ): string | void {
-    return this.authService.getLogin(callback, res);
+    this.authService.getLogin(callback, res);
+    return 'Logged In';
   }
   @UseGuards(AuthenticatedGuard)
   @Get('signout')

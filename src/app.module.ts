@@ -1,3 +1,4 @@
+import { LocalStrategy } from './strategies/local.strategy';
 import { SessionSerializer } from './serializers/session.serializer';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -18,6 +19,6 @@ config();
     UserModule,
   ],
   controllers: [],
-  providers: [SessionSerializer],
+  providers: [],
 })
 export class AppModule {}
