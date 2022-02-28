@@ -1,3 +1,4 @@
+import { User } from 'src/model/user.model';
 import { UnAuthenticatedGuard } from '../guards/unauthenticated.guard';
 import { UserService } from '../user/user.service';
 import { AuthenticatedGuard } from '../guards/authenticated.guard';
@@ -15,8 +16,9 @@ import {
   Body,
   Delete,
   Res,
+  UploadedFiles,
 } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { Request, Express, Response } from 'express';
 import { AccountService } from './account.service';
 @Controller('account')
@@ -117,14 +119,14 @@ export class AccountController {
   }
   @UseGuards(AuthenticatedGuard)
   @Post(':id/newfile')
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(FilesInterceptor('file'))
   postNewFile(
-    @Req() req: Request | any,
+    @Req() req: Irequest,
     @Param('id') param,
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFiles() file: Express.Multer.File[],
   ): Promise<HttpStatus> | HttpStatus {
     if (req.user.userid !== param) return 403;
-    return this.accountService.postNewFile(file, param, req);
+    return this.accountService.postNewFile(file, param);
   }
   @UseGuards(AuthenticatedGuard)
   @Get(':id/file/:file/download')
@@ -137,7 +139,7 @@ export class AccountController {
       id,
       file,
     );
-    if (!f) return res.sendStatus(404);
+    if (!f) return res.sendStatus(HttpStatus.REQUESTED_RANGE_NOT_SATISFIABLE);
     const ctypes = {
       png: 'image/png',
       jpg: 'image/jpeg',
@@ -189,4 +191,7 @@ export class AccountController {
     if (!foundFile) return HttpStatus.REQUESTED_RANGE_NOT_SATISFIABLE;
     return this.userService.deleteFileByUserId(id, file);
   }
+}
+interface Irequest extends Request {
+  user: User;
 }

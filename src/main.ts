@@ -13,6 +13,7 @@ async function bootstrap() {
   const redisStore = connectRedis(session);
   const client = redis.createClient({
     url: db,
+    legacyMode:true
   });
   client.connect();
   client.ping();
@@ -24,22 +25,15 @@ async function bootstrap() {
     maxAge: 1000 * 604800,
     credentials: true,
   });
-  app.use(
-    compression({
-      quality: 'high',
-    }),
-  );
+  app.use(compression());
   app.use(
     session({
       secret: process.env.SECRET,
       resave: false,
       saveUninitialized: false,
-      proxy: true,
       cookie: {
         maxAge: 1000 * 604800,
         sameSite: 'strict',
-        httpOnly: false,
-        secure: true,
       },
       store: new redisStore({ client }),
     }),

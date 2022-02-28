@@ -10,6 +10,7 @@ import {
   Req,
   UseGuards,
   Post,
+  HttpCode,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Response, Request } from 'express';
@@ -17,20 +18,15 @@ import { Response, Request } from 'express';
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
-  @UseGuards(LocalGuard)
+
   @Post('login')
-  getLogin(
-    @Query('callback') callback: string,
-    @Res({
-      passthrough: true,
-    })
-    res: Response,
-  ): string | void {
-    this.authService.getLogin(callback, res);
-    return 'Logged In';
+  @UseGuards(LocalGuard)
+  @HttpCode(200)
+  getLogin(): string {
+    return 'LOGGED IN';
   }
   @UseGuards(AuthenticatedGuard)
-  @Get('signout')
+  @Post('signout')
   getSignOut(@Req() req: Request) {
     return this.authService.getSignOut(req);
   }

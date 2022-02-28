@@ -69,24 +69,29 @@ export class AccountService {
       UploadedFileSize,
     };
   }
-  async postNewFile(file: Express.Multer.File, id, _req): Promise<HttpStatus> {
+  async postNewFile(
+    file: Express.Multer.File[],
+    id: string,
+  ): Promise<HttpStatus> {
     if (!file) return HttpStatus.NO_CONTENT;
     const user = await this.userModel.findOne({ userid: id });
     if (!user) return HttpStatus.SERVICE_UNAVAILABLE;
-    console.log(file);
-    const filenames = file.originalname.replace(/ /g, '_');
-    outputFile(`files/${id}/${filenames}`, file.buffer, (err) => {
-      err ? console.log(err) : null;
-    });
-    const files = [...(await this.userModel.findOne({ userid: id })).files];
-    files.push(`files/${id}/${filenames}`);
-    await this.userModel.updateOne(
-      { userid: id },
-      {
-        lastUploaded: Date.now(),
-        files,
-      },
-    );
+    for (const f of file) {
+      const filenames = f.originalname.replace(/ /g, '_');
+      outputFile(`files/${id}/${filenames}`, f.buffer, (err) => {
+        err ? console.log(err) : null;
+      });
+      const files = [...(await this.userModel.findOne({ userid: id })).files];
+      files.push(`files/${id}/${filenames}`);
+      await this.userModel.updateOne(
+        { userid: id },
+        {
+          lastUploaded: Date.now(),
+          files,
+        },
+      );
+    }
+
     return 201;
   }
   async getFiles(id: string): Promise<{ files: any[] }> {

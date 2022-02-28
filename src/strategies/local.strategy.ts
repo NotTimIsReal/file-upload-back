@@ -13,7 +13,6 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
       console.log('un');
       return false;
     }
-    console.log(user);
     return user;
   }
 }

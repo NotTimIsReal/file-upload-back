@@ -5,13 +5,6 @@ import { Response, Request } from 'express';
 @Injectable()
 export class AuthService {
   constructor(private readonly userService: UserService) {}
-  getLogin(callback?: string, res?: Response): string | void {
-    if (callback) return res.redirect(callback);
-    else {
-      console.log('hello');
-      return 'Logged In';
-    }
-  }
   getSignOut(req: Request) {
     req.logout();
     req.session.destroy((err) => {
