@@ -109,12 +109,11 @@ export class AccountController {
       zip: 'application/zip',
       ts: 'application/javascript',
     };
-    const data = Buffer.from(f.toJSON().data);
     res.setHeader(
       'Content-Type',
       ctypes[file.split('.').pop()] || 'text/plain',
     );
-    res.send(data);
+    res.send(f);
     return;
   }
   @UseGuards(AuthenticatedGuard)
@@ -168,13 +167,12 @@ export class AccountController {
       zip: 'application/zip',
       ts: 'application/javascript',
     };
-    const data = Buffer.from(f.toJSON().data);
     res.setHeader(
       'Content-Type',
       ctypes[file.split('.').pop()] || 'text/plain',
     );
     res.setHeader('Content-Disposition', `attachment; filename=${file}`);
-    res.send(data);
+    res.send(f);
     return;
   }
   @UseGuards(AuthenticatedGuard)
