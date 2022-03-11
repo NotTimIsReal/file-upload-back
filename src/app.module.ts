@@ -1,29 +1,24 @@
+import { LocalStrategy } from './strategies/local.strategy';
 import { SessionSerializer } from './serializers/session.serializer';
-import { LocalStrategy } from './strategies/auth/local.strategy';
 import { Module } from '@nestjs/common';
-import { AccountController } from './controllers/account/account.controller';
-import { AccountService } from './services/account/account.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { config } from 'dotenv';
-import { UserSchema } from './model/user.model';
-import { AuthController } from './controllers/auth/auth.controller';
-import { AuthService } from './services/auth/auth.service';
-import { UserService } from './services/user/user.service';
+import { UserService } from './user/user.service';
 import { PassportModule } from '@nestjs/passport';
-config({ path: './.env' });
+import { AccountModule } from './account/account.module';
+import { AuthModule } from './auth/auth.module';
+import { UserSchema } from './model/user.model';
+import { UserModule } from './user/user.module';
+config();
 @Module({
   imports: [
     MongooseModule.forRoot(process.env.DB),
-    MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
     PassportModule.register({ session: true }),
+    AccountModule,
+    AuthModule,
+    UserModule,
   ],
-  controllers: [AccountController, AuthController],
-  providers: [
-    AccountService,
-    AuthService,
-    UserService,
-    LocalStrategy,
-    SessionSerializer,
-  ],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

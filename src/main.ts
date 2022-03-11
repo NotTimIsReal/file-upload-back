@@ -6,24 +6,18 @@ import * as passport from 'passport';
 import * as redis from 'redis';
 import * as connectRedis from 'connect-redis';
 import * as compression from 'compression';
-config({ path: './.env' });
+config();
 async function bootstrap() {
+  const db = `redis://${process.env.REDISHOST}:${process.env.REDISPORT}`;
   const app = await NestFactory.create(AppModule);
   const redisStore = connectRedis(session);
-  let redisClient: redis.RedisClient;
-  if (!process.env.REDISPASS) {
-    redisClient = redis.createClient({
-      host: process.env.REDISHOST,
-      port: process.env.REDISPORT,
-    });
-  } else {
-    redisClient = redis.createClient({
-      host: process.env.REDISHOST,
-      port: process.env.REDISPORT,
-      password: process.env.REDISPASS,
-    });
-  }
-  redisClient.on('connect', function (err) {
+  const client = redis.createClient({
+    url: db,
+    legacyMode:true
+  });
+  client.connect();
+  client.ping();
+  client.on('connect', function (err) {
     console.log('redis connected');
   });
   app.enableCors({
@@ -37,14 +31,11 @@ async function bootstrap() {
       secret: process.env.SECRET,
       resave: false,
       saveUninitialized: false,
-      proxy: true,
       cookie: {
         maxAge: 1000 * 604800,
         sameSite: 'strict',
-        httpOnly: false,
-        secure: true,
       },
-      store: new redisStore({ client: redisClient }),
+      store: new redisStore({ client }),
     }),
   );
   app.use(passport.initialize());
