@@ -1,11 +1,12 @@
 import { User, User as user } from '../model/user.model';
-import { Injectable, HttpStatus } from '@nestjs/common';
+import { Injectable, HttpStatus, HttpException } from '@nestjs/common';
 import { Request } from 'express';
 import { createHash } from 'crypto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { outputFile } from 'fs-extra';
 import { UserService } from '../user/user.service';
+import fetch from 'node-fetch';
 const accounts = [];
 type publicuser = {
   userid: string;
@@ -43,30 +44,51 @@ export class AccountService {
       delete n['_id'];
       return n;
     });
+    r.forEach((n) => {
+      if (!n.avatar) {
+        n.avatar = this.generateAvatar(n.username);
+      }
+    });
     return r;
   }
   async getAccount(id: string): Promise<publicuser | number | any> {
     const end = await this.userModel.findOne({ userid: id });
     if (!end) return HttpStatus.NOT_FOUND;
-    const { userid, createdAt, username, UploadedFileSize, lastUploaded } = end;
+    const {
+      userid,
+      createdAt,
+      username,
+      UploadedFileSize,
+      lastUploaded,
+      avatar,
+      files,
+    } = end;
     return {
       userid,
       createdAt,
       username,
       UploadedFileSize,
       lastUploaded,
+      avatar: avatar || this.generateAvatar(username),
+      files,
     };
   }
   async getAccountByName(name: string) {
     const acc = await this.userService.findUserByName(name);
-    if (!acc) return 404;
-    const { userid, username, createdAt, UploadedFileSize } = acc;
+    if (!acc) throw new HttpException('No User Found', HttpStatus.NOT_FOUND);
+    const { userid, username, createdAt, UploadedFileSize, files } = acc;
+    let { avatar } = acc;
+    if (!avatar) {
+      avatar = this.generateAvatar(username);
+    }
 
     return {
       userid,
       username,
       createdAt,
       UploadedFileSize,
+      avatar,
+      files,
     };
   }
   async postNewFile(
@@ -126,5 +148,8 @@ export class AccountService {
   async getFile(file: string, id: string): Promise<string> {
     const fileFound = await this.userService.getFileByUserId(file, id);
     return fileFound;
+  }
+  generateAvatar(seed: string): string {
+    return `https://avatars.dicebear.com/api/identicon/${seed}.svg`;
   }
 }

@@ -17,10 +17,12 @@ import {
   Delete,
   Res,
   UploadedFiles,
+  HttpException,
 } from '@nestjs/common';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { Request, Express, Response } from 'express';
 import { AccountService } from './account.service';
+import { HttpErrorByCode } from '@nestjs/common/utils/http-error-by-code.util';
 @Controller('account')
 export class AccountController {
   constructor(
@@ -41,13 +43,15 @@ export class AccountController {
     return this.accountService.getAccount(param);
   }
   @Get('user/:username')
-  async getUser(@Param('username') username: string, @Req() req: any) {
+  async getUser(@Param('username') username: string, @Req() req: Irequest) {
     if (req.user && username === '@me') {
       const account = await this.accountService.getAccount(req.user.userid);
       console.log(account);
       return await this.accountService.getAccountByName(account.username);
-    } else if (!req.user && username === '@me')
-      return HttpStatus.METHOD_NOT_ALLOWED;
+    } else if (!req.user && username === '@me') {
+      console.log(req.cookies);
+      throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
+    }
     return await this.accountService.getAccountByName(username);
   }
   @UseGuards(AuthenticatedGuard)
@@ -108,6 +112,7 @@ export class AccountController {
       psd: 'image/vnd.adobe.photoshop',
       zip: 'application/zip',
       ts: 'application/javascript',
+      heic: 'image/heic',
     };
     res.setHeader(
       'Content-Type',
@@ -146,6 +151,7 @@ export class AccountController {
       txt: 'text/plain',
       json: 'application/json',
       pdf: 'application/pdf',
+      heic: 'image/heic',
       doc: 'application/msword',
       docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
       xls: 'application/vnd.ms-excel',

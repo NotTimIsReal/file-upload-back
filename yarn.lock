@@ -1652,6 +1652,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/node-fetch@npm:latest":
+  version: 2.6.1
+  resolution: "@types/node-fetch@npm:2.6.1"
+  dependencies:
+    "@types/node": "*"
+    form-data: ^3.0.0
+  checksum: a3e5d7f413d1638d795dff03f7b142b1b0e0c109ed210479000ce7b3ea11f9a6d89d9a024c96578d9249570c5fe5287a5f0f4aaba98199222230196ff2d6b283
+  languageName: node
+  linkType: hard
+
 "@types/node@npm:*":
   version: 16.11.7
   resolution: "@types/node@npm:16.11.7"
@@ -6005,6 +6015,7 @@ __metadata:
     "@types/jest": ^27.4.1
     "@types/multer": ^1.4.7
     "@types/node": ^17.0.21
+    "@types/node-fetch": latest
     "@types/passport": ^1.0.7
     "@types/passport-local": ^1.0.34
     "@types/supertest": ^2.0.11
@@ -6020,6 +6031,7 @@ __metadata:
     fs-extra: ^10.0.1
     jest: ^27.5.1
     mongoose: ^6.2.3
+    node-fetch: 2.6.1
     passport: ^0.5.2
     passport-local: ^1.0.0
     prettier: ^2.5.1
@@ -6043,6 +6055,13 @@ __metadata:
   dependencies:
     lodash: ^4.17.21
   checksum: e8c856c04a1645062112a72e59a98b203505ed5111ff84a3a5f40611afa229b578c7d50f1e6a7f17aa62baeea4a640d2e2f61f63afc05423aa267af10977fb2b
+  languageName: node
+  linkType: hard
+
+"node-fetch@npm:2.6.1":
+  version: 2.6.1
+  resolution: "node-fetch@npm:2.6.1"
+  checksum: 91075bedd57879117e310fbcc36983ad5d699e522edb1ebcdc4ee5294c982843982652925c3532729fdc86b2d64a8a827797a745f332040d91823c8752ee4d7c
   languageName: node
   linkType: hard
 

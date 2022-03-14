@@ -51,6 +51,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/jest", "npm:27.4.1"],
             ["@types/multer", "npm:1.4.7"],
             ["@types/node", "npm:17.0.21"],
+            ["@types/node-fetch", "npm:2.6.1"],
             ["@types/passport", "npm:1.0.7"],
             ["@types/passport-local", "npm:1.0.34"],
             ["@types/supertest", "npm:2.0.11"],
@@ -66,6 +67,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["fs-extra", "npm:10.0.1"],
             ["jest", "virtual:1fea5feeeef93c4123d6b3e11f18cb894fd26815a4251eb9ed2e4aa6daddcba6b45babc832b5e08c2a74d66ffcf6e38a4b5091e4176bf1004d4af8b5dd864d52#npm:27.5.1"],
             ["mongoose", "npm:6.2.3"],
+            ["node-fetch", "npm:2.6.1"],
             ["passport", "npm:0.5.2"],
             ["passport-local", "npm:1.0.0"],
             ["prettier", "npm:2.5.1"],
@@ -2425,6 +2427,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@types-node-npm-17.0.21-7d68eb6a13-89dcd2fe82.zip/node_modules/@types/node/",
           "packageDependencies": [
             ["@types/node", "npm:17.0.21"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@types/node-fetch", [
+        ["npm:2.6.1", {
+          "packageLocation": "./.yarn/cache/@types-node-fetch-npm-2.6.1-cb57369c1c-a3e5d7f413.zip/node_modules/@types/node-fetch/",
+          "packageDependencies": [
+            ["@types/node-fetch", "npm:2.6.1"],
+            ["@types/node", "npm:16.11.7"],
+            ["form-data", "npm:3.0.1"]
           ],
           "linkType": "HARD",
         }]
@@ -7541,6 +7554,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/jest", "npm:27.4.1"],
             ["@types/multer", "npm:1.4.7"],
             ["@types/node", "npm:17.0.21"],
+            ["@types/node-fetch", "npm:2.6.1"],
             ["@types/passport", "npm:1.0.7"],
             ["@types/passport-local", "npm:1.0.34"],
             ["@types/supertest", "npm:2.0.11"],
@@ -7556,6 +7570,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["fs-extra", "npm:10.0.1"],
             ["jest", "virtual:1fea5feeeef93c4123d6b3e11f18cb894fd26815a4251eb9ed2e4aa6daddcba6b45babc832b5e08c2a74d66ffcf6e38a4b5091e4176bf1004d4af8b5dd864d52#npm:27.5.1"],
             ["mongoose", "npm:6.2.3"],
+            ["node-fetch", "npm:2.6.1"],
             ["passport", "npm:0.5.2"],
             ["passport-local", "npm:1.0.0"],
             ["prettier", "npm:2.5.1"],
@@ -7585,6 +7600,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["node-fetch", [
+        ["npm:2.6.1", {
+          "packageLocation": "./.yarn/cache/node-fetch-npm-2.6.1-46c670dbc1-91075bedd5.zip/node_modules/node-fetch/",
+          "packageDependencies": [
+            ["node-fetch", "npm:2.6.1"]
+          ],
+          "linkType": "HARD",
+        }],
         ["npm:2.6.6", {
           "packageLocation": "./.yarn/cache/node-fetch-npm-2.6.6-056db6b778-ee8290626b.zip/node_modules/node-fetch/",
           "packageDependencies": [
