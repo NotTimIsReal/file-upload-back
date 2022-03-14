@@ -112,7 +112,7 @@ export class AccountController {
       psd: 'image/vnd.adobe.photoshop',
       zip: 'application/zip',
       ts: 'application/javascript',
-      heic: 'image/heic',
+      HEIC: 'image/heic',
     };
     res.setHeader(
       'Content-Type',
@@ -151,7 +151,7 @@ export class AccountController {
       txt: 'text/plain',
       json: 'application/json',
       pdf: 'application/pdf',
-      heic: 'image/heic',
+      HEIC: 'image/heic',
       doc: 'application/msword',
       docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
       xls: 'application/vnd.ms-excel',
