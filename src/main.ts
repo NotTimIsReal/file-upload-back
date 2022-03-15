@@ -13,7 +13,7 @@ async function bootstrap() {
   const redisStore = connectRedis(session);
   const client = redis.createClient({
     url: db,
-    legacyMode:true
+    legacyMode: true,
   });
   client.connect();
   client.ping();
@@ -33,7 +33,7 @@ async function bootstrap() {
       saveUninitialized: false,
       cookie: {
         maxAge: 1000 * 604800,
-        sameSite: 'strict',
+        sameSite: 'lax',
       },
       store: new redisStore({ client }),
     }),

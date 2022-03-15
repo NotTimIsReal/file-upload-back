@@ -112,11 +112,12 @@ export class AccountController {
       psd: 'image/vnd.adobe.photoshop',
       zip: 'application/zip',
       ts: 'application/javascript',
-      HEIC: 'image/heic',
+      heic: 'image/heic',
+      mov: 'video/mov',
     };
     res.setHeader(
       'Content-Type',
-      ctypes[file.split('.').pop()] || 'text/plain',
+      ctypes[file.split('.').pop().toLowerCase()] || 'text/plain',
     );
     res.send(f);
     return;
@@ -172,10 +173,11 @@ export class AccountController {
       psd: 'image/vnd.adobe.photoshop',
       zip: 'application/zip',
       ts: 'application/javascript',
+      mov: 'video/mov',
     };
     res.setHeader(
       'Content-Type',
-      ctypes[file.split('.').pop()] || 'text/plain',
+      ctypes[file.split('.').pop().toLowerCase()] || 'text/plain',
     );
     res.setHeader('Content-Disposition', `attachment; filename=${file}`);
     res.send(f);
