@@ -17,15 +17,19 @@ export class UserService {
     await this.userModel.findOneAndDelete({ userid: id });
     return HttpStatus.OK;
   }
-  async getFilesByUserId(id: string): Promise<Array<string>> {
+  async getFilesByUserId(id: string, noPaths = false): Promise<Array<string>> {
     const user = await this.findUserById(id);
-    return user.files;
+    if (!noPaths) return user.files;
+    else {
+      const arr = user.files.map((e) => e.split('/')[2]);
+      return arr;
+    }
   }
   async deleteFileByUserId(id: string, file: string): Promise<string[]> {
     const allFiles = await this.getFilesByUserId(id);
-    const newarr = allFiles.filter((e) => e !== file);
+    const newarr = allFiles.filter((e) => e.split('/')[2] !== file);
     await this.userModel.updateOne({ userid: id }, { files: newarr });
-    unlink(file, (err) => {
+    unlink(`files/${id}/${file}`, (err) => {
       if (err) return console.error(err);
     });
     return await this.getFilesByUserId(id);

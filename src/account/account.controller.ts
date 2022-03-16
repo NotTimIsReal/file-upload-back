@@ -46,10 +46,8 @@ export class AccountController {
   async getUser(@Param('username') username: string, @Req() req: Irequest) {
     if (req.user && username === '@me') {
       const account = await this.accountService.getAccount(req.user.userid);
-      console.log(account);
       return await this.accountService.getAccountByName(account.username);
     } else if (!req.user && username === '@me') {
-      console.log(req.cookies);
       throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
     }
     return await this.accountService.getAccountByName(username);
@@ -57,7 +55,8 @@ export class AccountController {
   @UseGuards(AuthenticatedGuard)
   @Get(':id/files')
   getFiled(@Req() req: any, @Param('id') param): HttpStatus | object {
-    if (req.user.userid !== param) return 403;
+    if (req.user.userid !== param)
+      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
     console.log('test');
     return this.accountService.getFiles(param);
   }
@@ -68,7 +67,8 @@ export class AccountController {
     @Param('file') file: string,
     @Req() req: any,
   ) {
-    if (req.user && req.user.userid !== id) return 403;
+    if (req.user && req.user.userid !== id)
+      throw new HttpException('FORBIDDEN', HttpStatus.FORBIDDEN);
     return this.accountService.getFile(id, file);
   }
   @UseGuards(AuthenticatedGuard)
@@ -130,13 +130,14 @@ export class AccountController {
     @Param('id') param,
     @UploadedFiles() file: Express.Multer.File[],
   ): Promise<HttpStatus> | HttpStatus {
-    if (req.user.userid !== param) return 403;
+    if (req.user.userid !== param)
+      throw new HttpException('FORBIDDEN', HttpStatus.FORBIDDEN);
     return this.accountService.postNewFile(file, param);
   }
   @UseGuards(AuthenticatedGuard)
   @Get(':id/file/:file/download')
   async getFileAndDownload(
-    @Res() res: Response,
+    @Res({ passthrough: true }) res: Response,
     @Param('id') id,
     @Param('file') file,
   ) {
@@ -144,7 +145,11 @@ export class AccountController {
       id,
       file,
     );
-    if (!f) return res.sendStatus(HttpStatus.REQUESTED_RANGE_NOT_SATISFIABLE);
+    if (!f)
+      throw new HttpException(
+        'Files Not Found',
+        HttpStatus.REQUESTED_RANGE_NOT_SATISFIABLE,
+      );
     const ctypes = {
       png: 'image/png',
       jpg: 'image/jpeg',
@@ -180,8 +185,7 @@ export class AccountController {
       ctypes[file.split('.').pop().toLowerCase()] || 'text/plain',
     );
     res.setHeader('Content-Disposition', `attachment; filename=${file}`);
-    res.send(f);
-    return;
+    return f;
   }
   @UseGuards(AuthenticatedGuard)
   @Delete(':id/deletefile')
@@ -189,12 +193,16 @@ export class AccountController {
     @Req() req: any,
     @Param('id') id: string,
     @Body('files') file: string,
-  ): Promise<number | string[]> {
+  ): Promise<number | string[] | HttpException> {
     if (req.user.userid !== id) return 403;
     if (!file) return HttpStatus.NO_CONTENT;
-    const allFiles = await this.userService.getFilesByUserId(id);
+    const allFiles = await this.userService.getFilesByUserId(id, true);
     const foundFile = allFiles.find((e) => e === file);
-    if (!foundFile) return HttpStatus.REQUESTED_RANGE_NOT_SATISFIABLE;
+    if (!foundFile)
+      return new HttpException(
+        'File Not Found',
+        HttpStatus.REQUESTED_RANGE_NOT_SATISFIABLE,
+      );
     return this.userService.deleteFileByUserId(id, file);
   }
 }
