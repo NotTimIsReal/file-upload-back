@@ -7,6 +7,7 @@ import { Model } from 'mongoose';
 import { outputFile } from 'fs-extra';
 import { UserService } from '../user/user.service';
 import fetch from 'node-fetch';
+import { writeFileSync } from 'fs';
 const accounts = [];
 type publicuser = {
   userid: string;
@@ -136,8 +137,9 @@ export class AccountService {
     if (!email) return HttpStatus.NO_CONTENT;
     if (!username) return HttpStatus.NO_CONTENT;
     if (await this.userService.findUserByName(username))
-      return HttpStatus.NOT_ACCEPTABLE;
-    if (!RegExp(/^\S+@\S+\.\S+$/).test(email)) return HttpStatus.NOT_ACCEPTABLE;
+      throw new HttpException('User Already Exists', HttpStatus.NOT_ACCEPTABLE);
+    if (!RegExp(/^\S+@\S+\.\S+$/).test(email))
+      throw new HttpException('Email Invalid', HttpStatus.NOT_ACCEPTABLE);
     const id = await uid();
     const p = hasher(password);
     const db = new this.userModel({
@@ -159,5 +161,13 @@ export class AccountService {
   }
   generateAvatar(seed: string): string {
     return `https://avatars.dicebear.com/api/identicon/${seed}.svg`;
+  }
+  async editFile(file: string, id: string, data: string) {
+    if (!(await this.userService.getFileByUserId(file, id)))
+      throw new HttpException('File Not Found', HttpStatus.NOT_FOUND);
+    writeFileSync(`files/${id}/${file}`, data, {
+      encoding: 'utf8',
+    });
+    return HttpStatus.OK;
   }
 }

@@ -18,6 +18,7 @@ import {
   Res,
   UploadedFiles,
   HttpException,
+  Put,
 } from '@nestjs/common';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { Request, Express, Response } from 'express';
@@ -114,6 +115,7 @@ export class AccountController {
       ts: 'application/javascript',
       heic: 'image/heic',
       mov: 'video/mov',
+      svg: 'image/svg+xml',
     };
     res.setHeader(
       'Content-Type',
@@ -179,6 +181,7 @@ export class AccountController {
       zip: 'application/zip',
       ts: 'application/javascript',
       mov: 'video/mov',
+      svg: 'image/svg+xml',
     };
     res.setHeader(
       'Content-Type',
@@ -195,15 +198,31 @@ export class AccountController {
     @Body('files') file: string,
   ): Promise<number | string[] | HttpException> {
     if (req.user.userid !== id) return 403;
-    if (!file) return HttpStatus.NO_CONTENT;
+    if (!file)
+      throw new HttpException('File Not In Body', HttpStatus.NO_CONTENT);
     const allFiles = await this.userService.getFilesByUserId(id, true);
     const foundFile = allFiles.find((e) => e === file);
     if (!foundFile)
-      return new HttpException(
+      throw new HttpException(
         'File Not Found',
         HttpStatus.REQUESTED_RANGE_NOT_SATISFIABLE,
       );
     return this.userService.deleteFileByUserId(id, file);
+  }
+  @UseGuards(AuthenticatedGuard)
+  @Put('/:id/updatefile')
+  async editFile(
+    @Req() req: Irequest,
+    @Param('id') id: string,
+    @Body('file') file: string,
+    @Body('content') content: string,
+  ) {
+    if (req.user.userid !== id) return 403;
+    if (!content)
+      throw new HttpException('No Content in body', HttpStatus.BAD_REQUEST);
+    if (!file)
+      throw new HttpException('File Not In Body', HttpStatus.BAD_REQUEST);
+    return await this.accountService.editFile(file, id, content);
   }
 }
 interface Irequest extends Request {
