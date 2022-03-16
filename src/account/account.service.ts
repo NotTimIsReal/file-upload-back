@@ -1,4 +1,4 @@
-import { User, User as user } from '../model/user.model';
+import { User as user } from '../model/user.model';
 import { Injectable, HttpStatus, HttpException } from '@nestjs/common';
 import { Request } from 'express';
 import { createHash } from 'crypto';
@@ -33,7 +33,7 @@ export class AccountService {
     @InjectModel('User') private readonly userModel: Model<user>,
     private readonly userService: UserService,
   ) {}
-  async getAccounts(request: Request) {
+  async getAccounts(req: Request) {
     const answer = [];
     answer.push(...(await this.userModel.find()));
     const r = answer.map((e) => {
@@ -49,6 +49,15 @@ export class AccountService {
         n.avatar = this.generateAvatar(n.username);
       }
     });
+    if (r.length === 0) {
+      req.body = {
+        password: 'admin',
+        username: 'admin',
+        email: 'admin@example.com',
+      };
+      await this.postSignUp(req);
+      return this.getAccounts(req);
+    }
     return r;
   }
   async getAccount(id: string): Promise<publicuser | number | any> {
@@ -130,7 +139,6 @@ export class AccountService {
       return HttpStatus.NOT_ACCEPTABLE;
     if (!RegExp(/^\S+@\S+\.\S+$/).test(email)) return HttpStatus.NOT_ACCEPTABLE;
     const id = await uid();
-    console.log(accounts);
     const p = hasher(password);
     const db = new this.userModel({
       userid: id,
