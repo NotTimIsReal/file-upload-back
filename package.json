@@ -37,6 +37,7 @@
     "dotenv": "^16.0.0",
     "express-session": "^1.17.2",
     "fs-extra": "^10.0.1",
+    "fsevents": "^2.3.2",
     "mongoose": "^6.2.3",
     "node-fetch": "2.6.1",
     "passport": "^0.5.2",

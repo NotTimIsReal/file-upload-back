@@ -19,6 +19,7 @@ export class UserService {
   }
   async getFilesByUserId(id: string, noPaths = false): Promise<Array<string>> {
     const user = await this.findUserById(id);
+    console.log(user);
     if (!noPaths) return user.files;
     else {
       const arr = user.files.map((e) => e.split('/')[2]);

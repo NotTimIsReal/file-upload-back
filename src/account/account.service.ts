@@ -163,7 +163,7 @@ export class AccountService {
     return `https://avatars.dicebear.com/api/identicon/${seed}.svg`;
   }
   async editFile(file: string, id: string, data: string) {
-    if (!(await this.userService.getFileByUserId(file, id)))
+    if (!(await this.userService.getFileByUserId(id, file)))
       throw new HttpException('File Not Found', HttpStatus.NOT_FOUND);
     writeFileSync(`files/${id}/${file}`, data, {
       encoding: 'utf8',
