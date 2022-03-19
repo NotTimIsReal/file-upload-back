@@ -33,8 +33,8 @@ async function bootstrap() {
       saveUninitialized: false,
       cookie: {
         maxAge: 1000 * 604800,
-        sameSite: 'none',
-        secure: true,
+        sameSite: 'lax',
+        domain: process.env.DOMAIN,
       },
       store: new redisStore({ client }),
     }),

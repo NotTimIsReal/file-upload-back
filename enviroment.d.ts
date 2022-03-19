@@ -6,5 +6,6 @@ namespace NodeJs {
     SECRET: string;
     REDISHOST: string;
     REDISPASS?: string;
+    DOMAIN: string;
   }
 }
