@@ -34,7 +34,7 @@ async function bootstrap() {
       cookie: {
         maxAge: 1000 * 604800,
         sameSite: 'lax',
-	httpOnly: false,
+        httpOnly: false,
       },
       store: new redisStore({ client }),
     }),

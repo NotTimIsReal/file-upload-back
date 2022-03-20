@@ -20,7 +20,7 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('login')
-  @UseGuards(LocalGuard)
+  @UseGuards(UnAuthenticatedGuard, LocalGuard)
   @HttpCode(200)
   getLogin(): string {
     return 'LOGGED IN';
