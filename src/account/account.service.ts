@@ -6,9 +6,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { outputFile } from 'fs-extra';
 import { UserService } from '../user/user.service';
-import fetch from 'node-fetch';
+import fs from 'fs';
 import { writeFileSync } from 'fs';
-const accounts = [];
 type publicuser = {
   userid: string;
   createdAt: number;
@@ -108,21 +107,27 @@ export class AccountService {
     if (!file) return HttpStatus.NO_CONTENT;
     const user = await this.userModel.findOne({ userid: id });
     if (!user) return HttpStatus.SERVICE_UNAVAILABLE;
+    const files = [...(await this.userModel.findOne({ userid: id })).files];
     for (const f of file) {
       const filenames = f.originalname.replace(/ /g, '_');
       outputFile(`files/${id}/${filenames}`, f.buffer, (err) => {
         err ? console.log(err) : null;
       });
-      const files = [...(await this.userModel.findOne({ userid: id })).files];
+
       files.push(`files/${id}/${filenames}`);
-      await this.userModel.updateOne(
-        { userid: id },
-        {
-          lastUploaded: Date.now(),
-          files,
-        },
-      );
     }
+    let filesize = 0;
+    for (const f of files) {
+      filesize += getSize(`/files/${id}/${f}`);
+    }
+    await this.userModel.updateOne(
+      { userid: id },
+      {
+        lastUploaded: Date.now(),
+        files,
+        UploadedFileSize: filesize,
+      },
+    );
 
     return 201;
   }
@@ -148,7 +153,7 @@ export class AccountService {
       email,
       createdAt: Date.now(),
       password: p,
-      UploadedFileSize: '0mb',
+      UploadedFileSize: '0',
       lastUploaded: 0,
       files: [],
     });
@@ -163,11 +168,25 @@ export class AccountService {
     return `https://avatars.dicebear.com/api/identicon/${seed}.svg`;
   }
   async editFile(file: string, id: string, data: string) {
+    const files = await this.userService.getFilesByUserId(id);
+    let filesize = 0;
     if (!(await this.userService.getFileByUserId(id, file)))
       throw new HttpException('File Not Found', HttpStatus.NOT_FOUND);
     writeFileSync(`files/${id}/${file}`, data, {
       encoding: 'utf8',
     });
+    for (const f of files) {
+      filesize += getSize(`/files/${id}/${f}`);
+    }
+    await this.userModel.updateOne(
+      { userid: id },
+      { UploadedFileSize: filesize },
+    );
     return HttpStatus.OK;
   }
+}
+function getSize(filename: string): number {
+  const stats = fs.statSync(filename);
+  const fileSizeInBytes = stats.size;
+  return Math.floor(fileSizeInBytes);
 }
