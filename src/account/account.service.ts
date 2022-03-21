@@ -117,6 +117,7 @@ export class AccountService {
       files.push(`files/${id}/${filenames}`);
     }
     let filesize = 0;
+    delay(500);
     for (const f of files) {
       filesize += getSize(f);
     }
