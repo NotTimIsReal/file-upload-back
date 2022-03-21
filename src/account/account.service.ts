@@ -117,7 +117,7 @@ export class AccountService {
       files.push(`files/${id}/${filenames}`);
     }
     let filesize = 0;
-    delay(1000);
+    await delay(1000);
     for (const f of files) {
       filesize += getSize(f);
     }
@@ -176,7 +176,7 @@ export class AccountService {
     writeFileSync(`files/${id}/${file}`, data, {
       encoding: 'utf8',
     });
-    delay(500);
+    await delay(500);
     for (const f of files) {
       filesize += getSize(f);
     }
