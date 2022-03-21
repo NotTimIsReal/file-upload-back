@@ -48,6 +48,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/cors", "npm:2.8.12"],
             ["@types/express", "npm:4.17.13"],
             ["@types/express-session", "npm:1.17.4"],
+            ["@types/fs-extra", "npm:9.0.13"],
             ["@types/jest", "npm:27.4.1"],
             ["@types/mime", "npm:2.0.3"],
             ["@types/multer", "npm:1.4.7"],
@@ -2420,6 +2421,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["@types/express-session", "npm:1.17.4"],
             ["@types/express", "npm:4.17.13"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@types/fs-extra", [
+        ["npm:9.0.13", {
+          "packageLocation": "./.yarn/cache/@types-fs-extra-npm-9.0.13-12fb7badd7-add79e212a.zip/node_modules/@types/fs-extra/",
+          "packageDependencies": [
+            ["@types/fs-extra", "npm:9.0.13"],
+            ["@types/node", "npm:16.11.7"]
           ],
           "linkType": "HARD",
         }]
@@ -8144,6 +8155,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/cors", "npm:2.8.12"],
             ["@types/express", "npm:4.17.13"],
             ["@types/express-session", "npm:1.17.4"],
+            ["@types/fs-extra", "npm:9.0.13"],
             ["@types/jest", "npm:27.4.1"],
             ["@types/mime", "npm:2.0.3"],
             ["@types/multer", "npm:1.4.7"],

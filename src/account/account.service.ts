@@ -118,7 +118,7 @@ export class AccountService {
     }
     let filesize = 0;
     for (const f of files) {
-      filesize += getSize(`/files/${id}/${f}`);
+      filesize += getSize(f);
     }
     await this.userModel.updateOne(
       { userid: id },
@@ -176,7 +176,7 @@ export class AccountService {
       encoding: 'utf8',
     });
     for (const f of files) {
-      filesize += getSize(`/files/${id}/${f}`);
+      filesize += getSize(f);
     }
     await this.userModel.updateOne(
       { userid: id },
