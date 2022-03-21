@@ -85,8 +85,8 @@ export class AccountController {
     );
     if (!f) return res.sendStatus(404);
     res.setHeader('Content-Type', getType(file) || 'text/plain');
-    res.send(f);
-    return;
+    res.setHeader('Content-Disposition', 'inline');
+    return res.send(f);
   }
   @UseGuards(AuthenticatedGuard)
   @Post(':id/newfile')
