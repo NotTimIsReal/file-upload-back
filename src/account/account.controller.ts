@@ -139,7 +139,7 @@ export class AccountController {
   @UseGuards(AuthenticatedGuard)
   @Get(':id/file/:file/download')
   async getFileAndDownload(
-    @Res({ passthrough: true }) res: Response,
+    @Res() res: Response,
     @Param('id') id,
     @Param('file') file,
   ) {
@@ -183,7 +183,12 @@ export class AccountController {
       mov: 'video/mov',
       svg: 'image/svg+xml',
     };
-    return res.download(file);
+    res.setHeader(
+      'Content-Type',
+      ctypes[file.split('.').pop().toLowerCase()] || 'text/plain',
+    );
+    res.setHeader('Content-Disposition', `attachment; filename=${file}`);
+    return res.send(f);
   }
   @UseGuards(AuthenticatedGuard)
   @Delete(':id/deletefile')
