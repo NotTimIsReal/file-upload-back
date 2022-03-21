@@ -104,8 +104,8 @@ export class AccountController {
   @Get(':id/file/:file/download')
   async getFileAndDownload(
     @Res() res: Response,
-    @Param('id') id,
-    @Param('file') file,
+    @Param('id') id: string,
+    @Param('file') file: string,
   ) {
     const f = await this.userService.getFilesByUserIdAndReturnAsBuffer(
       id,
@@ -116,7 +116,10 @@ export class AccountController {
         'Files Not Found',
         HttpStatus.REQUESTED_RANGE_NOT_SATISFIABLE,
       );
-    res.setHeader('Content-Type', getType(file) || 'text/plain');
+    res.setHeader(
+      'Content-Type',
+      getType(file.split('.').pop()) || 'text/plain',
+    );
     res.setHeader('Content-Disposition', `attachment; filename=${file}`);
     return res.send(f);
   }
