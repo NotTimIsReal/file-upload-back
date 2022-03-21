@@ -2,7 +2,7 @@ import { User } from 'src/model/user.model';
 import { UnAuthenticatedGuard } from '../guards/unauthenticated.guard';
 import { UserService } from '../user/user.service';
 import { AuthenticatedGuard } from '../guards/authenticated.guard';
-import mime from 'mime';
+import { getType } from 'mime';
 import {
   Controller,
   Get,
@@ -10,7 +10,6 @@ import {
   HttpStatus,
   Param,
   Post,
-  UploadedFile,
   UseInterceptors,
   UseGuards,
   Body,
@@ -20,10 +19,9 @@ import {
   HttpException,
   Put,
 } from '@nestjs/common';
-import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
-import { Request, Express, Response } from 'express';
+import { FilesInterceptor } from '@nestjs/platform-express';
+import { Request, Response } from 'express';
 import { AccountService } from './account.service';
-import { HttpErrorByCode } from '@nestjs/common/utils/http-error-by-code.util';
 @Controller('account')
 export class AccountController {
   constructor(
@@ -86,38 +84,7 @@ export class AccountController {
       file,
     );
     if (!f) return res.sendStatus(404);
-    const ctypes = {
-      png: 'image/png',
-      jpg: 'image/jpeg',
-      jpeg: 'image/jpeg',
-      txt: 'text/plain',
-      json: 'application/json',
-      pdf: 'application/pdf',
-      doc: 'application/msword',
-      docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-      xls: 'application/vnd.ms-excel',
-      xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-      ppt: 'application/vnd.ms-powerpoint',
-      pptx: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-      js: 'application/javascript',
-      html: 'text/html',
-      css: 'text/css',
-      mp4: 'video/mp4',
-      avi: 'video/x-msvideo',
-      mp3: 'audio/mpeg',
-      wav: 'audio/x-wav',
-      flac: 'audio/flac',
-      ogg: 'audio/ogg',
-      webm: 'video/webm',
-      mkv: 'video/x-matroska',
-      psd: 'image/vnd.adobe.photoshop',
-      zip: 'application/zip',
-      ts: 'application/javascript',
-      heic: 'image/heic',
-      mov: 'video/mov',
-      svg: 'image/svg+xml',
-    };
-    res.setHeader('Content-Type', mime.getType(file) || 'text/plain');
+    res.setHeader('Content-Type', getType(file) || 'text/plain');
     res.send(f);
     return;
   }
@@ -149,38 +116,7 @@ export class AccountController {
         'Files Not Found',
         HttpStatus.REQUESTED_RANGE_NOT_SATISFIABLE,
       );
-    const ctypes = {
-      png: 'image/png',
-      jpg: 'image/jpeg',
-      jpeg: 'image/jpeg',
-      txt: 'text/plain',
-      json: 'application/json',
-      pdf: 'application/pdf',
-      HEIC: 'image/heic',
-      doc: 'application/msword',
-      docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-      xls: 'application/vnd.ms-excel',
-      xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-      ppt: 'application/vnd.ms-powerpoint',
-      pptx: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-      js: 'application/javascript',
-      html: 'text/html',
-      css: 'text/css',
-      mp4: 'video/mp4',
-      avi: 'video/x-msvideo',
-      mp3: 'audio/mpeg',
-      wav: 'audio/x-wav',
-      flac: 'audio/flac',
-      ogg: 'audio/ogg',
-      webm: 'video/webm',
-      mkv: 'video/x-matroska',
-      psd: 'image/vnd.adobe.photoshop',
-      zip: 'application/zip',
-      ts: 'application/javascript',
-      mov: 'video/mov',
-      svg: 'image/svg+xml',
-    };
-    res.setHeader('Content-Type', mime.getType(file) || 'text/plain');
+    res.setHeader('Content-Type', getType(file) || 'text/plain');
     res.setHeader('Content-Disposition', `attachment; filename=${file}`);
     return res.send(f);
   }

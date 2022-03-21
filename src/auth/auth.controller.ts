@@ -1,19 +1,9 @@
 import { UnAuthenticatedGuard } from '../guards/unauthenticated.guard';
 import { AuthenticatedGuard } from '../guards/authenticated.guard';
 import { LocalGuard } from '../guards/local-auth.guard';
-import {
-  Controller,
-  Get,
-  HttpStatus,
-  Query,
-  Res,
-  Req,
-  UseGuards,
-  Post,
-  HttpCode,
-} from '@nestjs/common';
+import { Controller, Req, UseGuards, Post, HttpCode } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { Response, Request } from 'express';
+import { Request } from 'express';
 
 @Controller('auth')
 export class AuthController {

@@ -17,7 +17,7 @@ async function bootstrap() {
   });
   client.connect();
   client.ping();
-  client.on('connect', function (err) {
+  client.on('connect', function () {
     console.log('redis connected');
   });
   app.enableCors({
