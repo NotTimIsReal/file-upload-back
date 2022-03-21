@@ -183,12 +183,7 @@ export class AccountController {
       mov: 'video/mov',
       svg: 'image/svg+xml',
     };
-    res.setHeader(
-      'Content-Type',
-      ctypes[file.split('.').pop().toLowerCase()] || 'text/plain',
-    );
-    res.setHeader('Content-Disposition', `attachment; filename=${file}`);
-    return f;
+    return res.download(file);
   }
   @UseGuards(AuthenticatedGuard)
   @Delete(':id/deletefile')
