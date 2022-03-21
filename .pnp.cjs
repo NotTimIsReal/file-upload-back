@@ -49,6 +49,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/express", "npm:4.17.13"],
             ["@types/express-session", "npm:1.17.4"],
             ["@types/jest", "npm:27.4.1"],
+            ["@types/mime", "npm:2.0.3"],
             ["@types/multer", "npm:1.4.7"],
             ["@types/node", "npm:17.0.21"],
             ["@types/node-fetch", "npm:2.6.1"],
@@ -67,6 +68,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["fs-extra", "npm:10.0.1"],
             ["fsevents", "patch:fsevents@npm%3A2.3.2#~builtin<compat/fsevents>::version=2.3.2&hash=18f3a7"],
             ["jest", "virtual:1fea5feeeef93c4123d6b3e11f18cb894fd26815a4251eb9ed2e4aa6daddcba6b45babc832b5e08c2a74d66ffcf6e38a4b5091e4176bf1004d4af8b5dd864d52#npm:27.5.1"],
+            ["mime", "npm:3.0.0"],
             ["mongoose", "npm:6.2.3"],
             ["node-fetch", "npm:2.6.1"],
             ["passport", "npm:0.5.2"],
@@ -2402,6 +2404,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@types-mime-npm-1.3.2-ea71878ab3-0493368244.zip/node_modules/@types/mime/",
           "packageDependencies": [
             ["@types/mime", "npm:1.3.2"]
+          ],
+          "linkType": "HARD",
+        }],
+        ["npm:2.0.3", {
+          "packageLocation": "./.yarn/cache/@types-mime-npm-2.0.3-809d6f0e0f-1f4f144423.zip/node_modules/@types/mime/",
+          "packageDependencies": [
+            ["@types/mime", "npm:2.0.3"]
           ],
           "linkType": "HARD",
         }]
@@ -7251,6 +7260,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["mime", "npm:2.6.0"]
           ],
           "linkType": "HARD",
+        }],
+        ["npm:3.0.0", {
+          "packageLocation": "./.yarn/cache/mime-npm-3.0.0-8d911e4c06-f43f9b7bfa.zip/node_modules/mime/",
+          "packageDependencies": [
+            ["mime", "npm:3.0.0"]
+          ],
+          "linkType": "HARD",
         }]
       ]],
       ["mime-db", [
@@ -7553,6 +7569,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/express", "npm:4.17.13"],
             ["@types/express-session", "npm:1.17.4"],
             ["@types/jest", "npm:27.4.1"],
+            ["@types/mime", "npm:2.0.3"],
             ["@types/multer", "npm:1.4.7"],
             ["@types/node", "npm:17.0.21"],
             ["@types/node-fetch", "npm:2.6.1"],
@@ -7571,6 +7588,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["fs-extra", "npm:10.0.1"],
             ["fsevents", "patch:fsevents@npm%3A2.3.2#~builtin<compat/fsevents>::version=2.3.2&hash=18f3a7"],
             ["jest", "virtual:1fea5feeeef93c4123d6b3e11f18cb894fd26815a4251eb9ed2e4aa6daddcba6b45babc832b5e08c2a74d66ffcf6e38a4b5091e4176bf1004d4af8b5dd864d52#npm:27.5.1"],
+            ["mime", "npm:3.0.0"],
             ["mongoose", "npm:6.2.3"],
             ["node-fetch", "npm:2.6.1"],
             ["passport", "npm:0.5.2"],

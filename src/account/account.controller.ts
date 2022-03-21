@@ -2,7 +2,7 @@ import { User } from 'src/model/user.model';
 import { UnAuthenticatedGuard } from '../guards/unauthenticated.guard';
 import { UserService } from '../user/user.service';
 import { AuthenticatedGuard } from '../guards/authenticated.guard';
-import { LocalGuard } from '../guards/local-auth.guard';
+import mime from 'mime';
 import {
   Controller,
   Get,
@@ -117,10 +117,7 @@ export class AccountController {
       mov: 'video/mov',
       svg: 'image/svg+xml',
     };
-    res.setHeader(
-      'Content-Type',
-      ctypes[file.split('.').pop().toLowerCase()] || 'text/plain',
-    );
+    res.setHeader('Content-Type', mime.getType(file) || 'text/plain');
     res.send(f);
     return;
   }
@@ -183,10 +180,7 @@ export class AccountController {
       mov: 'video/mov',
       svg: 'image/svg+xml',
     };
-    res.setHeader(
-      'Content-Type',
-      ctypes[file.split('.').pop().toLowerCase()] || 'text/plain',
-    );
+    res.setHeader('Content-Type', mime.getType(file) || 'text/plain');
     res.setHeader('Content-Disposition', `attachment; filename=${file}`);
     return res.send(f);
   }
