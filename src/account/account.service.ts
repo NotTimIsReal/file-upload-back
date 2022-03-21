@@ -175,6 +175,7 @@ export class AccountService {
     writeFileSync(`files/${id}/${file}`, data, {
       encoding: 'utf8',
     });
+    delay(500);
     for (const f of files) {
       filesize += getSize(f);
     }
@@ -189,4 +190,7 @@ function getSize(filename: string): number {
   const stats = fs.statSync(filename);
   const fileSizeInBytes = stats.size;
   return Math.floor(fileSizeInBytes);
+}
+function delay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
