@@ -6,7 +6,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { outputFile } from 'fs-extra';
 import { UserService } from '../user/user.service';
-import fs from 'fs';
+import * as fs from 'fs';
 import { writeFileSync } from 'fs';
 type publicuser = {
   userid: string;
