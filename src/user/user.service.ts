@@ -33,6 +33,7 @@ export class UserService {
     unlink(`files/${id}/${file}`, (err) => {
       if (err) return console.error(err);
     });
+    delay(500);
     let fileSize = 0;
     for (const file of newarr) {
       fileSize += getSize(`/files/${id}/${file}`);
@@ -65,4 +66,7 @@ function getSize(filename: string): number {
   const stats = statSync(filename);
   const fileSizeInBytes = stats.size;
   return Math.floor(fileSizeInBytes);
+}
+function delay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
