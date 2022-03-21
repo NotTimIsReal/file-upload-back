@@ -84,7 +84,9 @@ export class AccountController {
       file,
     );
     if (!f) return res.sendStatus(404);
-    res.setHeader('Content-Type', getType(file) || 'text/plain');
+    const extention =
+      file.split('.').pop() === 'ts' ? 'js' : file.split('.').pop();
+    res.setHeader('Content-Type', getType(extention) || 'text/plain');
     res.setHeader('Content-Disposition', 'inline');
     return res.send(f);
   }
@@ -117,7 +119,7 @@ export class AccountController {
         HttpStatus.REQUESTED_RANGE_NOT_SATISFIABLE,
       );
     const extention =
-      file.split('.').pop() == 'ts' ? 'js' : file.split('.').pop();
+      file.split('.').pop() === 'ts' ? 'js' : file.split('.').pop();
     res.setHeader('Content-Type', getType(extention) || 'text/plain');
     res.setHeader('Content-Disposition', `attachment; filename=${file}`);
     return res.send(f);
