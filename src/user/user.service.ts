@@ -33,7 +33,7 @@ export class UserService {
     unlink(`files/${id}/${file}`, (err) => {
       if (err) return console.error(err);
     });
-    delay(500);
+    await delay(500);
     let fileSize = 0;
     for (const file of newarr) {
       fileSize += getSize(`/files/${id}/${file}`);
