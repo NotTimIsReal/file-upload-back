@@ -29,6 +29,8 @@ export class UserService {
   async deleteFileByUserId(id: string, file: string): Promise<string[]> {
     const allFiles = await this.getFilesByUserId(id);
     const newarr = allFiles.filter((e) => e.split('/')[2] !== file);
+    //find element in array and return index
+    newarr.splice(newarr.findIndex((f) => f === file, 1));
     await this.userModel.updateOne({ userid: id }, { files: newarr });
     unlink(`files/${id}/${file}`, (err) => {
       if (err) return console.error(err);
