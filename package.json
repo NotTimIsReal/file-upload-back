@@ -41,7 +41,7 @@
     "fs-extra": "^10.0.1",
     "fsevents": "^2.3.2",
     "mime": "^3.0.0",
-    "mongoose": "^6.2.3",
+    "mongoose": "^6.4.6",
     "node-fetch": "2.6.1",
     "passport": "^0.5.2",
     "passport-local": "^1.0.0",
